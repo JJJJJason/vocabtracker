@@ -409,6 +409,25 @@
     "status": "active"
   },
   {
+    "id": "w_c8cf2ce8-0298-4733-bdaf-08793bed0868",
+    "spelling": "family",
+    "phonetic": "",
+    "meaning": "",
+    "partOfSpeech": "",
+    "exampleSentence": "",
+    "source": "",
+    "stage": 0,
+    "nextReviewDate": "2026-06-11",
+    "difficulty": 1,
+    "reviewHistory": [],
+    "failStreak": 0,
+    "isStubborn": false,
+    "stubbornPassCount": 0,
+    "createdAt": "2026-06-11T03:35:45.373Z",
+    "updatedAt": "2026-06-11T03:35:45.373Z",
+    "status": "active"
+  },
+  {
     "id": "w_cb62d5d5-a973-450d-a4cb-4940ad078e69",
     "spelling": "brilliant",
     "phonetic": "/ˈbrɪliənt/",
