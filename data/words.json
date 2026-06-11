@@ -184,6 +184,25 @@
     "status": "active"
   },
   {
+    "id": "w_5a152575-a8bd-4519-a320-5d2486d3fd8e",
+    "spelling": "family",
+    "phonetic": "/ˈfɛm(ɘ)li/",
+    "meaning": "A group of people who are closely related to one another (by blood, marriage or adoption); kin; for example, a set of parents and their children; an immediate family.",
+    "partOfSpeech": "n.",
+    "exampleSentence": "Our family lives in town.",
+    "source": "",
+    "stage": 0,
+    "nextReviewDate": "2026-06-11",
+    "difficulty": 1,
+    "reviewHistory": [],
+    "failStreak": 0,
+    "isStubborn": false,
+    "stubbornPassCount": 0,
+    "createdAt": "2026-06-11T03:32:10.214Z",
+    "updatedAt": "2026-06-11T03:32:10.214Z",
+    "status": "active"
+  },
+  {
     "id": "w_6564ef59-6770-42a5-a5bf-bdee5bb3d719",
     "spelling": "hesitate",
     "phonetic": "/ˈhezɪteɪt/",
