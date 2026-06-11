@@ -11,7 +11,7 @@ const DictLoader = {
 
     this._loading = (async () => {
       try {
-        const resp = await fetch('data/dict-zh.json?v=9852479');
+        const resp = await fetch('data/dict-zh.json?v=8b5a469');
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         this._dict = await resp.json();
         console.log(`DictLoader: ${Object.keys(this._dict).length} words loaded`);

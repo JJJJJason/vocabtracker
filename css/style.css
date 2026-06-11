@@ -431,6 +431,7 @@ footer {
   padding: 12px 16px;
   border: 1.5px solid var(--color-border-light);
   border-radius: var(--radius-sm);
+  font-family: var(--font-body);
   font-size: var(--font-size-md);
   text-align: center;
   margin: 10px 0;
