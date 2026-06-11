@@ -444,6 +444,54 @@ footer {
   box-shadow: 0 0 0 3px rgba(80,176,240,.15);
 }
 
+/* ── Form inputs (modals, edit dialogs) ───── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+}
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--color-border-light);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  text-align: left;
+  background: var(--color-bg);
+  color: var(--color-text);
+  margin: 0;
+  transition: border-color .2s;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(80,176,240,.15);
+}
+.form-input.word-spelling-input {
+  font-family: var(--font-word);
+}
+.modal h3 {
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+.modal .form-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 .fill-blank-sentence {
   font-size: var(--font-size-md);
   margin: 14px 0;

@@ -102,15 +102,24 @@ async function editWord(id) {
   overlay.innerHTML = `
     <div class="modal">
       <h3>编辑单词</h3>
-      <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
-        <label>拼写: <input id="edit-spelling" class="quiz-input word-spelling-input" value="${escapeHtml(w.spelling)}" style="margin:0;"></label>
-        <label>音标: <input id="edit-phonetic" class="quiz-input" value="${escapeHtml(w.phonetic || '')}" style="margin:0;"></label>
-        <label>词性: <input id="edit-pos" class="quiz-input" value="${escapeHtml(w.partOfSpeech || '')}" placeholder="如: v., n., adj., adv." style="margin:0;"></label>
-        <label>释义: <input id="edit-meaning" class="quiz-input" value="${escapeHtml(w.meaning)}" style="margin:0;"></label>
-        <label>例句: <input id="edit-sentence" class="quiz-input" value="${escapeHtml(w.exampleSentence || '')}" style="margin:0;"></label>
-        <label>来源: <input id="edit-source" class="quiz-input" value="${escapeHtml(w.source || '')}" style="margin:0;"></label>
+      <div class="form-group" style="margin-top:12px;">
+        <label class="form-label">拼写
+          <input id="edit-spelling" class="form-input word-spelling-input" value="${escapeHtml(w.spelling)}">
+        </label>
+        <label class="form-label">音标
+          <input id="edit-phonetic" class="form-input" value="${escapeHtml(w.phonetic || '')}">
+        </label>
+        <label class="form-label">释义
+          <input id="edit-meaning" class="form-input" value="${escapeHtml(w.meaning)}">
+        </label>
+        <label class="form-label">例句
+          <input id="edit-sentence" class="form-input" value="${escapeHtml(w.exampleSentence || '')}">
+        </label>
+        <label class="form-label">来源
+          <input id="edit-source" class="form-input" value="${escapeHtml(w.source || '')}">
+        </label>
       </div>
-      <div style="margin-top:16px; display:flex; gap:8px; justify-content:flex-end;">
+      <div class="form-actions">
         <button class="btn btn-outline" onclick="this.closest('.modal-overlay').remove()">取消</button>
         <button class="btn btn-primary" onclick="saveWordEdit('${id}')">保存</button>
       </div>
@@ -127,7 +136,6 @@ async function saveWordEdit(id) {
   const updates = {
     spelling: document.getElementById('edit-spelling').value,
     phonetic: document.getElementById('edit-phonetic').value,
-    partOfSpeech: document.getElementById('edit-pos').value,
     meaning: document.getElementById('edit-meaning').value,
     exampleSentence: document.getElementById('edit-sentence').value,
     source: document.getElementById('edit-source').value,
