@@ -1,50 +1,55 @@
 // pages/settings.js — Settings and data import/export
 
 async function renderSettings(container) {
-  const settings = await DB.getSettings();
+  try {
+    const settings = await DB.getSettings();
 
-  container.innerHTML = `
-    <div class="page-header"><h2>⚙️ 设置</h2></div>
+    container.innerHTML = `
+      <div class="page-header"><h2>⚙️ 设置</h2></div>
 
-    <div class="card">
-      <h3>学习设置</h3>
-      <div style="margin-top:12px; display:flex; flex-direction:column; gap:12px;">
-        <label>每日新词上限: <input type="number" id="setting-daily-limit" value="${settings.dailyNewWordLimit}" min="1" max="50" style="width:70px; padding:6px; border-radius:6px; border:1px solid var(--color-border);"></label>
-        <label>每日顽固词上限: <input type="number" id="setting-stubborn-limit" value="${settings.stubbornDailyLimit}" min="1" max="20" style="width:70px; padding:6px; border-radius:6px; border:1px solid var(--color-border);"></label>
-        <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+      <div class="card">
+        <h3>学习设置</h3>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:12px;">
+          <label>每日新词上限: <input type="number" id="setting-daily-limit" value="${settings.dailyNewWordLimit}" min="1" max="50" style="width:70px; padding:6px; border-radius:6px; border:1px solid var(--color-border);"></label>
+          <label>每日顽固词上限: <input type="number" id="setting-stubborn-limit" value="${settings.stubbornDailyLimit}" min="1" max="20" style="width:70px; padding:6px; border-radius:6px; border:1px solid var(--color-border);"></label>
+          <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+        </div>
       </div>
-    </div>
 
-    <div class="card">
-      <h3>📥 导入单词</h3>
-      <p style="color:var(--color-text-light); font-size:14px; margin:8px 0;">
-        JSON 格式: [{"spelling": "word", "phonetic": "/.../", "meaning": "释义", "exampleSentence": "例句", "source": "来源"}]
-      </p>
-      <div style="margin-top:12px;">
-        <input type="file" id="import-file" accept=".json" style="display:none;" onchange="handleFileImport(event)">
-        <button class="btn btn-outline" onclick="document.getElementById('import-file').click()">📁 选择 JSON 文件</button>
-        <button class="btn btn-outline" onclick="pasteImport()">📋 从剪贴板粘贴</button>
+      <div class="card">
+        <h3>📥 导入单词</h3>
+        <p style="color:var(--color-text-light); font-size:14px; margin:8px 0;">
+          JSON 格式: [{"spelling": "word", "phonetic": "/.../", "meaning": "释义", "exampleSentence": "例句", "source": "来源"}]
+        </p>
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleFileImport(event)">
+          <button class="btn btn-primary" onclick="document.getElementById('import-file').click()">📁 选择 JSON 文件导入</button>
+          <button class="btn btn-primary" onclick="pasteImport()">📋 从剪贴板导入</button>
+        </div>
+        <div id="import-result" style="margin-top:12px;"></div>
       </div>
-      <div id="import-result" style="margin-top:12px;"></div>
-    </div>
 
-    <div class="card">
-      <h3>📤 导出/备份</h3>
-      <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">
-        <button class="btn btn-outline" onclick="exportWordsJSON()">📄 导出单词 (JSON)</button>
-        <button class="btn btn-outline" onclick="exportFullBackup()">💾 完整备份 (含进度)</button>
-        <button class="btn btn-outline" onclick="document.getElementById('restore-file').click()">📥 恢复备份</button>
-        <input type="file" id="restore-file" accept=".json" style="display:none;" onchange="handleRestoreBackup(event)">
+      <div class="card">
+        <h3>📤 导出/备份</h3>
+        <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">
+          <button class="btn btn-outline" onclick="exportWordsJSON()">📄 导出单词 (JSON)</button>
+          <button class="btn btn-outline" onclick="exportFullBackup()">💾 完整备份 (含进度)</button>
+          <button class="btn btn-outline" onclick="document.getElementById('restore-file').click()">📥 恢复备份</button>
+          <input type="file" id="restore-file" accept=".json" style="display:none" onchange="handleRestoreBackup(event)">
+        </div>
+        <div id="export-result" style="margin-top:12px;"></div>
       </div>
-      <div id="export-result" style="margin-top:12px;"></div>
-    </div>
 
-    <div class="card">
-      <h3>🗑️ 数据管理</h3>
-      <p style="color:var(--color-text-light); font-size:13px; margin-bottom:8px;">清除数据前建议先导出备份</p>
-      <button class="btn btn-danger" onclick="clearAllData()">清除所有数据</button>
-    </div>
-  `;
+      <div class="card">
+        <h3>🗑️ 数据管理</h3>
+        <p style="color:var(--color-text-light); font-size:13px; margin-bottom:8px;">清除数据前建议先导出备份</p>
+        <button class="btn btn-danger" onclick="clearAllData()">清除所有数据</button>
+      </div>
+    `;
+  } catch (e) {
+    console.error('Settings render error:', e);
+    container.innerHTML = '<div class="card"><p style="color:var(--color-danger);">设置页面加载失败: ' + e.message + '</p></div>';
+  }
 }
 
 async function saveSettings() {
