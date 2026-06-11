@@ -1,5 +1,24 @@
 [
   {
+    "id": "w_00597fbf-8ea9-4528-a9b4-7b396a1b8bb4",
+    "spelling": "happy",
+    "phonetic": "",
+    "meaning": "",
+    "partOfSpeech": "",
+    "exampleSentence": "",
+    "source": "",
+    "stage": 0,
+    "nextReviewDate": "2026-06-11",
+    "difficulty": 1,
+    "reviewHistory": [],
+    "failStreak": 0,
+    "isStubborn": false,
+    "stubbornPassCount": 0,
+    "createdAt": "2026-06-11T05:46:48.405Z",
+    "updatedAt": "2026-06-11T05:46:48.405Z",
+    "status": "active"
+  },
+  {
     "id": "w_0500b178-9baf-40eb-8b39-0b65fb95425c",
     "spelling": "familiar",
     "phonetic": "/fəˈmɪliər/",
