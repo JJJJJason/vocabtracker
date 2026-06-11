@@ -7,11 +7,14 @@ async function renderWordBank(container) {
   const stubbornCount = await WordStore.countStubborn();
 
   container.innerHTML = `
-    <div class="page-header"><h2>📚 单词库</h2><p class="date">共 ${allWords.length} 个单词</p></div>
+    <div class="page-header" style="display:flex; justify-content:space-between; align-items:center;">
+      <div><h2>📚 单词库</h2><p class="date">共 ${allWords.length} 个单词</p></div>
+      <button class="btn btn-primary btn-sm" onclick="showAddWordForm()">＋ 录入单词</button>
+    </div>
     <div class="card">
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
         <input type="text" id="word-search" class="quiz-input" placeholder="搜索单词..." style="max-width:200px; margin:0;" oninput="filterWordBank()">
-        <select id="status-filter" onchange="filterWordBank()" style="padding:8px; border-radius:8px; border:1px solid var(--color-border);">
+        <select id="status-filter" onchange="filterWordBank()" style="padding:8px; border-radius:8px; border:1px solid var(--color-border); background:var(--color-card); color:var(--color-text);">
           <option value="all">全部状态</option>
           <option value="active">学习中</option>
           <option value="pool">待背池 (${poolCount})</option>
@@ -141,6 +144,66 @@ async function deleteWord(id) {
     await WordStore.delete(id);
     App.navigate('wordbank');
   }
+}
+
+/* ── Add word form ────────────────────── */
+
+function showAddWordForm() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:460px;">
+      <h3 style="margin-bottom:16px;">➕ 录入新单词</h3>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; gap:8px;">
+          <input id="add-spelling" class="quiz-input" placeholder="拼写 *" style="flex:1; margin:0; text-align:left;" autocomplete="off" autocapitalize="off">
+          <input id="add-pos" class="quiz-input" placeholder="词性" style="width:90px; margin:0; text-align:left;" list="pos-list">
+          <datalist id="pos-list">
+            <option value="v."><option value="n."><option value="adj."><option value="adv.">
+            <option value="prep."><option value="conj."><option value="pron."><option value="phr.">
+          </datalist>
+        </div>
+        <input id="add-meaning" class="quiz-input" placeholder="中文释义 *" style="margin:0; text-align:left;">
+        <input id="add-phonetic" class="quiz-input" placeholder="音标 (如 /ˈɡrædʒuəl/)" style="margin:0; text-align:left;">
+        <input id="add-sentence" class="quiz-input" placeholder="例句" style="margin:0; text-align:left;">
+        <input id="add-source" class="quiz-input" placeholder="来源 (如 卷38-金水区)" style="margin:0; text-align:left;">
+      </div>
+      <div style="margin-top:18px; display:flex; gap:8px; justify-content:flex-end;">
+        <button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">取消</button>
+        <button class="btn btn-primary btn-sm" onclick="submitAddWord()">确认录入</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  // Focus spelling field
+  setTimeout(() => document.getElementById('add-spelling')?.focus(), 100);
+  // Allow Enter to submit
+  overlay.querySelectorAll('input').forEach(input => {
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitAddWord(); });
+  });
+}
+
+async function submitAddWord() {
+  const spelling = document.getElementById('add-spelling')?.value.trim();
+  const meaning = document.getElementById('add-meaning')?.value.trim();
+  if (!spelling) { alert('请输入单词拼写'); return; }
+  if (!meaning) { alert('请输入中文释义'); return; }
+
+  const wordData = {
+    spelling,
+    meaning,
+    phonetic: document.getElementById('add-phonetic')?.value.trim() || '',
+    partOfSpeech: document.getElementById('add-pos')?.value.trim() || '',
+    exampleSentence: document.getElementById('add-sentence')?.value.trim() || '',
+    source: document.getElementById('add-source')?.value.trim() || '',
+  };
+
+  await WordStore.add(wordData);
+  // Auto-push if token configured
+  GithubSync.push().catch(() => {});
+
+  document.querySelector('.modal-overlay')?.remove();
+  App.navigate('wordbank');
 }
 
 async function initWordBank(container) {}

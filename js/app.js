@@ -33,15 +33,17 @@ const App = {
     const page = this.pages[hash];
     if (!page) { location.hash = '#/dashboard'; return; }
 
-    // Update nav
+    // Update top nav
     document.querySelectorAll('#main-nav a').forEach(a => {
       const isActive = a.dataset.page === hash;
       a.classList.toggle('active', isActive);
-      if (isActive) {
-        a.setAttribute('aria-current', 'page');
-      } else {
-        a.removeAttribute('aria-current');
-      }
+      if (isActive) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    });
+
+    // Update bottom nav (mobile)
+    document.querySelectorAll('#bottom-nav a').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === hash);
     });
 
     // Check for stubborn words indicator
