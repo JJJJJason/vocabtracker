@@ -9,12 +9,12 @@ async function renderWordBank(container) {
   container.innerHTML = `
     <div class="page-header" style="display:flex; justify-content:space-between; align-items:center;">
       <div><h2>📚 单词库</h2><p class="date">共 ${allWords.length} 个单词</p></div>
-      <button class="btn btn-primary btn-sm" onclick="showAddWordForm()">＋ 录入单词</button>
+      <button class="btn btn-primary" onclick="showAddWordForm()">＋ 录入单词</button>
     </div>
     <div class="card">
       <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
         <input type="text" id="word-search" class="quiz-input" placeholder="搜索单词..." style="max-width:200px; margin:0;" oninput="filterWordBank()">
-        <select id="status-filter" onchange="filterWordBank()" style="padding:8px; border-radius:8px; border:1px solid var(--color-border); background:var(--color-card); color:var(--color-text);">
+        <select id="status-filter" onchange="filterWordBank()" style="font-size:var(--font-size-md); padding:8px 12px; border-radius:8px; border:1px solid var(--color-border); background:var(--color-card); color:var(--color-text);">
           <option value="all">全部状态</option>
           <option value="active">学习中</option>
           <option value="pool">待背池 (${poolCount})</option>
