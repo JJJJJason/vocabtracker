@@ -482,5 +482,24 @@
     "stubbornPassCount": 0,
     "createdAt": "2026-06-11T02:31:23.228Z",
     "status": "active"
+  },
+  {
+    "id": "w_db4df6d8-1c8c-41db-9f2d-62b655f672b2",
+    "spelling": "one",
+    "phonetic": "",
+    "meaning": "",
+    "partOfSpeech": "",
+    "exampleSentence": "",
+    "source": "",
+    "stage": 0,
+    "nextReviewDate": "2026-06-11",
+    "difficulty": 1,
+    "reviewHistory": [],
+    "failStreak": 0,
+    "isStubborn": false,
+    "stubbornPassCount": 0,
+    "createdAt": "2026-06-11T05:47:05.631Z",
+    "updatedAt": "2026-06-11T05:47:05.631Z",
+    "status": "active"
   }
 ]
