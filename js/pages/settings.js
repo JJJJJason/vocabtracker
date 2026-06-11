@@ -32,7 +32,7 @@ async function renderSettings(container) {
       <div class="card">
         <h3>☁️ GitHub 云端同步</h3>
         <p style="color:var(--color-text-light); font-size:13px; margin:8px 0;">
-          数据同步到 GitHub 仓库，其他设备打开网页后拉取即可共享数据。Token 仅存储在你的浏览器本地。
+          拉取数据无需 Token，打开网页即自动同步。Token 仅用于推送（写入），只需在导入单词的设备上配置。
         </p>
         <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
           <div style="display:flex; gap:8px; align-items:center;">

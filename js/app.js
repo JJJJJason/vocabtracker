@@ -15,17 +15,14 @@ const App = {
   async init() {
     await DB.init();
 
-    // Auto-pull from GitHub (non-blocking, silent fail if no token)
+    // Auto-pull from GitHub on every page load (no token needed for reading)
     try {
-      const configured = await GithubSync.isConfigured();
-      if (configured) {
-        console.log('Auto-pulling from GitHub...');
-        const result = await GithubSync.pull();
-        if (result.success) {
-          console.log(`Sync: +${result.added} new / ~${result.updated} updated / -${result.skipped} skipped`);
-        }
+      console.log('Auto-pulling from GitHub...');
+      const result = await GithubSync.pull();
+      if (result.success) {
+        console.log(`Sync: +${result.added} new / ~${result.updated} updated / -${result.skipped} skipped`);
       }
-    } catch (_) { /* offline or no token — that's fine */ }
+    } catch (_) { /* offline — that's fine */ }
 
     window.addEventListener('hashchange', () => this.route());
     this.route();

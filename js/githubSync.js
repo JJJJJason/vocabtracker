@@ -75,30 +75,24 @@ const GithubSync = {
 
   /**
    * Pull words from GitHub and merge into local DB.
+   * Reading is free — no token needed for public repos.
    * Merge rule: for each remote word, import if local doesn't have it,
    * or if remote updatedAt is newer than local.
    * Returns { success, added, updated, skipped, error? }
    */
   async pull() {
-    const token = await this.getToken();
-    if (!token) return { success: false, error: '未配置 GitHub Token' };
-
-    // 1. Fetch remote words via GitHub API
+    // Fetch from raw.githubusercontent.com — no auth needed for public repos
+    const rawURL = `https://raw.githubusercontent.com/${this.REPO}/main/${this.FILE_PATH}`;
     let remoteWords;
     try {
-      const resp = await fetch(`${this.API_BASE}/repos/${this.REPO}/contents/${this.FILE_PATH}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const resp = await fetch(rawURL, { cache: 'no-cache' });
       if (!resp.ok) {
-        if (resp.status === 404) return { success: false, error: '远程仓库尚无数据，请先推送一次' };
-        const err = await resp.json().catch(() => ({}));
-        return { success: false, error: err.message || `HTTP ${resp.status}` };
+        if (resp.status === 404) return { success: false, error: '云端暂无数据，请先在电脑端推送一次' };
+        return { success: false, error: `HTTP ${resp.status}` };
       }
-      const data = await resp.json();
-      const json = decodeURIComponent(escape(atob(data.content)));
-      remoteWords = JSON.parse(json);
+      remoteWords = await resp.json();
     } catch (e) {
-      return { success: false, error: `解析远程数据失败: ${e.message}` };
+      return { success: false, error: `网络错误: ${e.message}` };
     }
 
     // 2. Merge with local
