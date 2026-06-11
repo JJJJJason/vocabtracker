@@ -93,7 +93,7 @@ header {
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
   color: var(--color-text);
   letter-spacing: .5px;
@@ -111,7 +111,7 @@ header {
   color: var(--color-text-secondary);
   padding: 7px 16px;
   border-radius: 20px;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   font-weight: 500;
   transition: all .2s;
 }
@@ -550,12 +550,12 @@ a:hover { text-decoration: underline; }
 
 @media (max-width: 600px) {
   #app { padding: 10px 8px 20px; padding-bottom: 80px; }
-  .logo { font-size: 18px; }
+  .logo { font-size: 20px; }
 
   /* Collapse header nav to a compact scrollable row */
   header { padding: 10px 0 8px; gap: 8px; margin-bottom: 16px; }
   #main-nav { gap: 0; }
-  #main-nav a { font-size: 12px; padding: 5px 10px; }
+  #main-nav a { font-size: 14px; padding: 5px 10px; }
 
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .stat-card { padding: 14px 10px; }
