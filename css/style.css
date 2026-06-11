@@ -168,6 +168,14 @@ footer {
   overflow-y: auto;
 }
 
+.badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+.badge-success { background: #D5F5E3; color: var(--color-success); }
+.badge-pending { background: #FDEBD0; color: var(--color-warning); }
+
+.page-header { margin-bottom: 20px; }
+.page-header h2 { font-size: 24px; margin-bottom: 4px; }
+.page-header .date { color: var(--color-text-light); font-size: 14px; }
+
 @media (max-width: 600px) {
   #app { padding: 8px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
