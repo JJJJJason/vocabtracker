@@ -153,18 +153,23 @@ function showAddWordForm() {
   overlay.className = 'modal-overlay';
   overlay.innerHTML = `
     <div class="modal" style="max-width:460px;">
-      <h3 style="margin-bottom:16px;">➕ 录入新单词</h3>
+      <h3 style="margin-bottom:12px;">➕ 录入新单词</h3>
+      <p style="font-size:13px; color:var(--color-text-muted); margin-bottom:12px;">输入单词拼写，点击「查词」自动填充，或手动填写</p>
       <div style="display:flex; flex-direction:column; gap:10px;">
         <div style="display:flex; gap:8px;">
-          <input id="add-spelling" class="quiz-input" placeholder="拼写 *" style="flex:1; margin:0; text-align:left;" autocomplete="off" autocapitalize="off">
-          <input id="add-pos" class="quiz-input" placeholder="词性" style="width:90px; margin:0; text-align:left;" list="pos-list">
-          <datalist id="pos-list">
-            <option value="v."><option value="n."><option value="adj."><option value="adv.">
-            <option value="prep."><option value="conj."><option value="pron."><option value="phr.">
-          </datalist>
+          <input id="add-spelling" class="quiz-input" placeholder="输入英文单词 *" style="flex:1; margin:0; text-align:left; font-family:var(--font-word);" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button class="btn btn-accent btn-sm" onclick="lookupWord()" style="white-space:nowrap;">🔍 查词</button>
         </div>
-        <input id="add-meaning" class="quiz-input" placeholder="中文释义 *" style="margin:0; text-align:left;">
-        <input id="add-phonetic" class="quiz-input" placeholder="音标 (如 /ˈɡrædʒuəl/)" style="margin:0; text-align:left;">
+        <div id="lookup-status" style="font-size:12px; min-height:4px;"></div>
+        <div style="display:flex; gap:8px;">
+          <input id="add-pos" class="quiz-input" placeholder="词性" style="flex:1; margin:0; text-align:left;" list="pos-list">
+          <input id="add-phonetic" class="quiz-input" placeholder="音标" style="flex:1; margin:0; text-align:left;">
+        </div>
+        <datalist id="pos-list">
+          <option value="v."><option value="n."><option value="adj."><option value="adv.">
+          <option value="prep."><option value="conj."><option value="pron."><option value="phr.">
+        </datalist>
+        <input id="add-meaning" class="quiz-input" placeholder="中文释义" style="margin:0; text-align:left;">
         <input id="add-sentence" class="quiz-input" placeholder="例句" style="margin:0; text-align:left;">
         <input id="add-source" class="quiz-input" placeholder="来源 (如 卷38-金水区)" style="margin:0; text-align:left;">
       </div>
@@ -175,23 +180,63 @@ function showAddWordForm() {
     </div>`;
   document.body.appendChild(overlay);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
-  // Focus spelling field
   setTimeout(() => document.getElementById('add-spelling')?.focus(), 100);
-  // Allow Enter to submit
   overlay.querySelectorAll('input').forEach(input => {
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitAddWord(); });
   });
 }
 
+/* ── Dictionary lookup ────────────────── */
+
+async function lookupWord() {
+  const word = document.getElementById('add-spelling')?.value.trim();
+  if (!word) { alert('请先输入单词拼写'); return; }
+
+  const statusEl = document.getElementById('lookup-status');
+  statusEl.innerHTML = '<span style="color:var(--color-accent);">⏳ 查询中...</span>';
+
+  try {
+    const resp = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+    if (!resp.ok) {
+      statusEl.innerHTML = '<span style="color:var(--color-warning);">⚠️ 未找到该单词，请手动填写</span>';
+      return;
+    }
+    const data = await resp.json();
+    const entry = data[0];
+
+    // Extract data
+    const phonetic = entry.phonetic || (entry.phonetics?.find(p => p.text)?.text) || '';
+    const meaning = entry.meanings?.[0];
+    const pos = meaning?.partOfSpeech || '';
+    const definition = meaning?.definitions?.[0]?.definition || '';
+    const example = meaning?.definitions?.[0]?.example || '';
+
+    // Map English POS to Chinese abbreviations
+    const posMap = {
+      noun: 'n.', verb: 'v.', adjective: 'adj.', adverb: 'adv.',
+      pronoun: 'pron.', preposition: 'prep.', conjunction: 'conj.',
+      interjection: 'interj.', article: 'art.', determiner: 'det.',
+    };
+
+    // Fill in fields
+    if (phonetic) document.getElementById('add-phonetic').value = phonetic;
+    if (pos) document.getElementById('add-pos').value = posMap[pos] || pos + '.';
+    if (definition) document.getElementById('add-meaning').value = definition;
+    if (example) document.getElementById('add-sentence').value = example;
+
+    statusEl.innerHTML = '<span style="color:var(--color-success);">✅ 已自动填充，请检查后确认</span>';
+  } catch (e) {
+    statusEl.innerHTML = '<span style="color:var(--color-danger);">❌ 网络错误，请手动填写</span>';
+  }
+}
+
 async function submitAddWord() {
   const spelling = document.getElementById('add-spelling')?.value.trim();
-  const meaning = document.getElementById('add-meaning')?.value.trim();
   if (!spelling) { alert('请输入单词拼写'); return; }
-  if (!meaning) { alert('请输入中文释义'); return; }
 
   const wordData = {
     spelling,
-    meaning,
+    meaning: document.getElementById('add-meaning')?.value.trim() || '',
     phonetic: document.getElementById('add-phonetic')?.value.trim() || '',
     partOfSpeech: document.getElementById('add-pos')?.value.trim() || '',
     exampleSentence: document.getElementById('add-sentence')?.value.trim() || '',
@@ -199,7 +244,6 @@ async function submitAddWord() {
   };
 
   await WordStore.add(wordData);
-  // Auto-push if token configured
   GithubSync.push().catch(() => {});
 
   document.querySelector('.modal-overlay')?.remove();
