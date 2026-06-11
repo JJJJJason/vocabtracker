@@ -165,21 +165,21 @@ function showAddWordForm() {
       <p style="font-size:13px; color:var(--color-text-muted); margin-bottom:12px;">输入单词拼写，点击「查词」自动填充，或手动填写</p>
       <div style="display:flex; flex-direction:column; gap:10px;">
         <div style="display:flex; gap:8px;">
-          <input id="add-spelling" class="quiz-input word-spelling-input" placeholder="输入英文单词 *" style="flex:1; margin:0; text-align:left;" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <input id="add-spelling" class="form-input word-spelling-input" placeholder="输入英文单词 *" style="flex:1;" autocomplete="off" autocapitalize="off" spellcheck="false">
           <button class="btn btn-accent btn-sm" onclick="lookupWord()" style="white-space:nowrap;">🔍 查词</button>
         </div>
         <div id="lookup-status" style="font-size:12px; min-height:4px;"></div>
         <div style="display:flex; gap:8px;">
-          <input id="add-pos" class="quiz-input" placeholder="词性" style="flex:1; margin:0; text-align:left;" list="pos-list">
-          <input id="add-phonetic" class="quiz-input" placeholder="音标" style="flex:1; margin:0; text-align:left;">
+          <input id="add-pos" class="form-input" placeholder="词性" style="flex:1;" list="pos-list">
+          <input id="add-phonetic" class="form-input" placeholder="音标" style="flex:1;">
         </div>
         <datalist id="pos-list">
           <option value="v."><option value="n."><option value="adj."><option value="adv.">
           <option value="prep."><option value="conj."><option value="pron."><option value="phr.">
         </datalist>
-        <input id="add-meaning" class="quiz-input" placeholder="中文释义" style="margin:0; text-align:left;">
-        <input id="add-sentence" class="quiz-input" placeholder="例句" style="margin:0; text-align:left;">
-        <input id="add-source" class="quiz-input" placeholder="来源 (如 卷38-金水区)" style="margin:0; text-align:left;">
+        <input id="add-meaning" class="form-input" placeholder="中文释义">
+        <input id="add-sentence" class="form-input" placeholder="例句">
+        <input id="add-source" class="form-input" placeholder="来源 (如 卷38-金水区)">
       </div>
       <div style="margin-top:18px; display:flex; gap:8px; justify-content:flex-end;">
         <button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">取消</button>
