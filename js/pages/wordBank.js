@@ -195,36 +195,59 @@ async function lookupWord() {
   const statusEl = document.getElementById('lookup-status');
   statusEl.innerHTML = '<span style="color:var(--color-accent);">⏳ 查询中...</span>';
 
+  // Map English POS to Chinese abbreviations
+  const posMap = {
+    noun: 'n.', verb: 'v.', adjective: 'adj.', adverb: 'adv.',
+    pronoun: 'pron.', preposition: 'prep.', conjunction: 'conj.',
+    interjection: 'interj.', article: 'art.', determiner: 'det.',
+  };
+
+  let foundInLocal = false;
+
   try {
+    // ── Step 1: Check local dictionary first for Chinese meaning ──
+    const local = await DictLoader.lookup(word);
+    if (local) {
+      foundInLocal = true;
+      if (local.phonetic) document.getElementById('add-phonetic').value = local.phonetic;
+      if (local.meaning) document.getElementById('add-meaning').value = local.meaning;
+      if (local.pos) document.getElementById('add-pos').value = local.pos;
+      statusEl.innerHTML = '<span style="color:var(--color-accent);">📖 本地词典匹配，补充在线数据...</span>';
+    }
+
+    // ── Step 2: Fetch English data from dictionary API ──
     const resp = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
     if (!resp.ok) {
+      if (foundInLocal) {
+        statusEl.innerHTML = '<span style="color:var(--color-success);">✅ 已从本地词典填充（该单词未在在线词典中找到）</span>';
+        return;
+      }
       statusEl.innerHTML = '<span style="color:var(--color-warning);">⚠️ 未找到该单词，请手动填写</span>';
       return;
     }
     const data = await resp.json();
     const entry = data[0];
 
-    // Extract data
+    // Extract data from API
     const phonetic = entry.phonetic || (entry.phonetics?.find(p => p.text)?.text) || '';
     const meaning = entry.meanings?.[0];
     const pos = meaning?.partOfSpeech || '';
     const definition = meaning?.definitions?.[0]?.definition || '';
     const example = meaning?.definitions?.[0]?.example || '';
 
-    // Map English POS to Chinese abbreviations
-    const posMap = {
-      noun: 'n.', verb: 'v.', adjective: 'adj.', adverb: 'adv.',
-      pronoun: 'pron.', preposition: 'prep.', conjunction: 'conj.',
-      interjection: 'interj.', article: 'art.', determiner: 'det.',
-    };
+    // Fill fields from API (don't overwrite local dict data if already set)
+    if (phonetic && !document.getElementById('add-phonetic').value) {
+      document.getElementById('add-phonetic').value = phonetic;
+    }
+    if (pos && !document.getElementById('add-pos').value) {
+      document.getElementById('add-pos').value = posMap[pos] || pos + '.';
+    }
+    if (example && !document.getElementById('add-sentence').value) {
+      document.getElementById('add-sentence').value = example;
+    }
 
-    // Fill in fields
-    if (phonetic) document.getElementById('add-phonetic').value = phonetic;
-    if (pos) document.getElementById('add-pos').value = posMap[pos] || pos + '.';
-    if (example) document.getElementById('add-sentence').value = example;
-
-    // Translate definition to Chinese via MyMemory (free, no key needed)
-    if (definition) {
+    // ── Step 3: If not in local dict, translate definition to Chinese ──
+    if (!foundInLocal && definition) {
       try {
         const tResp = await fetch(
           `https://api.mymemory.translated.net/get?q=${encodeURIComponent(definition)}&langpair=en|zh-CN`
@@ -236,14 +259,22 @@ async function lookupWord() {
         } else {
           document.getElementById('add-meaning').value = definition;
         }
+        statusEl.innerHTML = '<span style="color:var(--color-warning);">⚠️ 本地词典未收录，使用机器翻译（建议核对释义）</span>';
       } catch (_) {
         document.getElementById('add-meaning').value = definition;
+        statusEl.innerHTML = '<span style="color:var(--color-warning);">⚠️ 本地词典未收录，显示英文释义</span>';
       }
+    } else if (foundInLocal) {
+      statusEl.innerHTML = '<span style="color:var(--color-success);">✅ 已自动填充（含本地词典中文释义），请检查后确认</span>';
     }
 
-    statusEl.innerHTML = '<span style="color:var(--color-success);">✅ 已自动填充（含中文释义），请检查后确认</span>';
   } catch (e) {
-    statusEl.innerHTML = '<span style="color:var(--color-danger);">❌ 网络错误，请手动填写</span>';
+    // If we already have local data, the API failure is less critical
+    if (foundInLocal) {
+      statusEl.innerHTML = '<span style="color:var(--color-success);">✅ 已从本地词典填充（在线查询失败）</span>';
+    } else {
+      statusEl.innerHTML = '<span style="color:var(--color-danger);">❌ 网络错误，请手动填写</span>';
+    }
   }
 }
 
