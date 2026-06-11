@@ -24,9 +24,9 @@ async function renderDashboard(container) {
     </div>
 
     <div class="stats-grid">
-      <div class="stat-card" onclick="App.navigate('study')">
-        <div class="number">${totalToStudy}</div>
-        <div class="label">今日待学</div>
+      <div class="stat-card stat-highlight" onclick="App.navigate('study')">
+        <div class="number gold">${totalToStudy}</div>
+        <div class="label">📖 今日待学</div>
       </div>
       <div class="stat-card">
         <div class="number">${newWords.length}</div>
