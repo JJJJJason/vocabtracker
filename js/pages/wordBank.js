@@ -103,7 +103,7 @@ async function editWord(id) {
     <div class="modal">
       <h3>编辑单词</h3>
       <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
-        <label>拼写: <input id="edit-spelling" class="quiz-input" value="${escapeHtml(w.spelling)}" style="margin:0;"></label>
+        <label>拼写: <input id="edit-spelling" class="quiz-input word-spelling-input" value="${escapeHtml(w.spelling)}" style="margin:0;"></label>
         <label>音标: <input id="edit-phonetic" class="quiz-input" value="${escapeHtml(w.phonetic || '')}" style="margin:0;"></label>
         <label>词性: <input id="edit-pos" class="quiz-input" value="${escapeHtml(w.partOfSpeech || '')}" placeholder="如: v., n., adj., adv." style="margin:0;"></label>
         <label>释义: <input id="edit-meaning" class="quiz-input" value="${escapeHtml(w.meaning)}" style="margin:0;"></label>
@@ -157,7 +157,7 @@ function showAddWordForm() {
       <p style="font-size:13px; color:var(--color-text-muted); margin-bottom:12px;">输入单词拼写，点击「查词」自动填充，或手动填写</p>
       <div style="display:flex; flex-direction:column; gap:10px;">
         <div style="display:flex; gap:8px;">
-          <input id="add-spelling" class="quiz-input" placeholder="输入英文单词 *" style="flex:1; margin:0; text-align:left; font-family:var(--font-word);" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <input id="add-spelling" class="quiz-input word-spelling-input" placeholder="输入英文单词 *" style="flex:1; margin:0; text-align:left;" autocomplete="off" autocapitalize="off" spellcheck="false">
           <button class="btn btn-accent btn-sm" onclick="lookupWord()" style="white-space:nowrap;">🔍 查词</button>
         </div>
         <div id="lookup-status" style="font-size:12px; min-height:4px;"></div>

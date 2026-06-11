@@ -73,13 +73,13 @@ function renderStubbornQuestion(container) {
       ).join('')}</div></div>`;
   } else if (q.type === 'ch_to_en') {
     html += `<div class="quiz-question"><div class="quiz-prompt">请拼写: "${q.prompt}"</div>
-      <input class="quiz-input" id="s-input" placeholder="输入英文拼写..." autocomplete="off">
+      <input class="quiz-input word-spelling-input" id="s-input" placeholder="输入英文拼写..." autocomplete="off">
       <button class="btn btn-primary" onclick="checkStubbornChToEn()">确认</button>
       <div id="s-feedback"></div></div>`;
   } else if (q.type === 'dictation') {
     html += `<div class="quiz-question"><div class="quiz-prompt">听发音，写出单词 (${q.meaning})</div>
       <button class="btn btn-outline" onclick="playStubbornDictation()">🔊 播放</button>
-      <input class="quiz-input" id="s-input" placeholder="输入英文拼写..." autocomplete="off">
+      <input class="quiz-input word-spelling-input" id="s-input" placeholder="输入英文拼写..." autocomplete="off">
       <button class="btn btn-primary" onclick="checkStubbornDictation()">确认</button>
       <div id="s-feedback"></div></div>`;
   } else if (q.type === 'fill_blank') {

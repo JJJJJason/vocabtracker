@@ -89,12 +89,12 @@ function renderFreeQuizQuestion() {
       ).join('')}</div></div>`;
   } else if (q.type === 'ch_to_en') {
     html += `<div class="quiz-question"><div class="quiz-prompt">请拼写: "${q.prompt}"</div>
-      <input class="quiz-input" id="f-input" placeholder="输入英文" autocomplete="off">
+      <input class="quiz-input word-spelling-input" id="f-input" placeholder="输入英文" autocomplete="off">
       <button class="btn btn-primary" onclick="freeChToEn()">确认</button><div id="f-feedback"></div></div>`;
   } else if (q.type === 'dictation') {
     html += `<div class="quiz-question"><div class="quiz-prompt">听发音写出单词 (${q.meaning})</div>
       <button class="btn btn-outline" onclick="freeDictationPlay()">🔊 播放</button>
-      <input class="quiz-input" id="f-input" placeholder="输入英文" autocomplete="off">
+      <input class="quiz-input word-spelling-input" id="f-input" placeholder="输入英文" autocomplete="off">
       <button class="btn btn-primary" onclick="freeDictationCheck()">确认</button><div id="f-feedback"></div></div>`;
   } else if (q.type === 'fill_blank') {
     html += `<div class="quiz-question"><div class="fill-blank-sentence">${q.prompt}</div>

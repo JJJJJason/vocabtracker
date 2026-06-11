@@ -59,6 +59,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Global form element font reset — prevent browser defaults (e.g. 宋体) */
+input, select, textarea, button, optgroup, datalist {
+  font-family: var(--font-body);
+}
+
+/* Only English word input (add-word form) uses serif for readability */
+.word-spelling-input {
+  font-family: var(--font-word) !important;
+}
+
 /* ── Layout ───────────────────────────── */
 
 #app {
@@ -422,7 +432,6 @@ footer {
   border: 1.5px solid var(--color-border-light);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-md);
-  font-family: var(--font-word);
   text-align: center;
   margin: 10px 0;
   background: var(--color-bg);

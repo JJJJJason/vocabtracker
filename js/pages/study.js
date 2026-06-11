@@ -161,7 +161,7 @@ function renderQuizQuestion(container) {
           <div class="quiz-type">✏️ ${typeLabels[q.type]}</div>
           <div class="quiz-prompt">请拼写: "${q.prompt}"</div>
           ${q.phonetic ? `<div class="quiz-phonetic">音标: ${q.phonetic}</div>` : ''}
-          <input type="text" class="quiz-input" id="spelling-input" placeholder="输入英文拼写..." autocomplete="off" autocapitalize="off">
+          <input type="text" class="quiz-input word-spelling-input" id="spelling-input" placeholder="输入英文拼写..." autocomplete="off" autocapitalize="off">
           <button class="btn btn-primary" onclick="checkChToEnAnswer()">确认</button>
           <div id="quiz-feedback"></div>
         </div>
@@ -174,7 +174,7 @@ function renderQuizQuestion(container) {
           <div class="quiz-type">🎧 ${typeLabels[q.type]}</div>
           <div class="quiz-prompt">听发音，写出单词 (释义: ${q.meaning})</div>
           <button class="btn btn-outline" onclick="playDictation()">🔊 播放发音</button>
-          <input type="text" class="quiz-input" id="spelling-input" placeholder="输入英文拼写..." autocomplete="off" autocapitalize="off">
+          <input type="text" class="quiz-input word-spelling-input" id="spelling-input" placeholder="输入英文拼写..." autocomplete="off" autocapitalize="off">
           <button class="btn btn-primary" onclick="checkDictationAnswer()">确认</button>
           <div id="quiz-feedback"></div>
         </div>
