@@ -221,10 +221,27 @@ async function lookupWord() {
     // Fill in fields
     if (phonetic) document.getElementById('add-phonetic').value = phonetic;
     if (pos) document.getElementById('add-pos').value = posMap[pos] || pos + '.';
-    if (definition) document.getElementById('add-meaning').value = definition;
     if (example) document.getElementById('add-sentence').value = example;
 
-    statusEl.innerHTML = '<span style="color:var(--color-success);">✅ 已自动填充，请检查后确认</span>';
+    // Translate definition to Chinese via MyMemory (free, no key needed)
+    if (definition) {
+      try {
+        const tResp = await fetch(
+          `https://api.mymemory.translated.net/get?q=${encodeURIComponent(definition)}&langpair=en|zh-CN`
+        );
+        const tData = await tResp.json();
+        const zhMeaning = tData?.responseData?.translatedText;
+        if (zhMeaning && zhMeaning !== definition) {
+          document.getElementById('add-meaning').value = zhMeaning;
+        } else {
+          document.getElementById('add-meaning').value = definition;
+        }
+      } catch (_) {
+        document.getElementById('add-meaning').value = definition;
+      }
+    }
+
+    statusEl.innerHTML = '<span style="color:var(--color-success);">✅ 已自动填充（含中文释义），请检查后确认</span>';
   } catch (e) {
     statusEl.innerHTML = '<span style="color:var(--color-danger);">❌ 网络错误，请手动填写</span>';
   }
