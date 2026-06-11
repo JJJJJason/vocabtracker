@@ -371,6 +371,25 @@
     "status": "pool"
   },
   {
+    "id": "w_a9b5d5d2-d2ce-4c2f-a63c-ddb7c073bc69",
+    "spelling": "family",
+    "phonetic": "/ˈfɛm(ɘ)li/",
+    "meaning": "一组彼此密切相关的人（通过血缘、婚姻或收养） ；亲属；例如，一组父母及其子女；直系亲属。",
+    "partOfSpeech": "n.",
+    "exampleSentence": "Our family lives in town.",
+    "source": "",
+    "stage": 0,
+    "nextReviewDate": "2026-06-11",
+    "difficulty": 1,
+    "reviewHistory": [],
+    "failStreak": 0,
+    "isStubborn": false,
+    "stubbornPassCount": 0,
+    "createdAt": "2026-06-11T03:35:58.217Z",
+    "updatedAt": "2026-06-11T03:35:58.217Z",
+    "status": "active"
+  },
+  {
     "id": "w_ae7967c1-14cc-40b6-a1b0-4f5377be3056",
     "spelling": "enormous",
     "phonetic": "/ɪˈnɔːrməs/",
