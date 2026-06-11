@@ -1,5 +1,11 @@
 // pages/study.js — Today's learning page (new words + review)
 
+/** Escape a string for safe use inside an HTML attribute's JS string (like onclick="func('...')") */
+function escapeForOnclick(str) {
+  const map = { '\\': '\\\\', "'": "\\'", '"': '&quot;', '<': '&lt;', '>': '&gt;', '&': '&amp;' };
+  return str.replace(/[\\'"<>&]/g, c => map[c]);
+}
+
 let studyState = {
   words: [],
   currentIndex: 0,
@@ -78,7 +84,7 @@ function renderStudyCard(container) {
       <div class="word-display">
         <div class="word-spelling">${word.spelling}</div>
         ${word.phonetic ? `<div class="word-phonetic">${word.phonetic}</div>` : ''}
-        <button class="btn btn-outline btn-sm" onclick="speakWord('${word.spelling.replace(/'/g, "\\'")}')">🔊 发音</button>
+        <button class="btn btn-outline btn-sm" onclick="speakWord('${escapeForOnclick(word.spelling)}')">🔊 发音</button>
       </div>
 
       <div class="word-meaning">

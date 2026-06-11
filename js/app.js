@@ -25,7 +25,13 @@ const App = {
 
     // Update nav
     document.querySelectorAll('#main-nav a').forEach(a => {
-      a.classList.toggle('active', a.dataset.page === hash);
+      const isActive = a.dataset.page === hash;
+      a.classList.toggle('active', isActive);
+      if (isActive) {
+        a.setAttribute('aria-current', 'page');
+      } else {
+        a.removeAttribute('aria-current');
+      }
     });
 
     // Check for stubborn words indicator

@@ -65,8 +65,8 @@ function statusText(s) {
 }
 
 function statusLabel(s) {
-  const labels = { active: 'info', pool: '', mastered: 'success', stubborn: 'danger' };
-  return labels[s] || '';
+  const labels = { active: 'info', pool: 'pending', mastered: 'success', stubborn: 'danger' };
+  return labels[s] || 'info';
 }
 
 async function filterWordBank() {

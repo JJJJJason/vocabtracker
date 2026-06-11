@@ -168,7 +168,7 @@ footer {
   overflow-y: auto;
 }
 
-.badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+.badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; background: #ECF0F1; color: var(--color-text-light); }
 .badge-success { background: #D5F5E3; color: var(--color-success); }
 .badge-pending { background: #FDEBD0; color: var(--color-warning); }
 
