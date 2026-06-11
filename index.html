@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>背单词 · VocabTracker</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/idb@8/build/umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1 class="logo">📖 VocabTracker</h1>
+      <nav id="main-nav">
+        <a href="#/dashboard" data-page="dashboard">仪表盘</a>
+        <a href="#/study" data-page="study">今日学习</a>
+        <a href="#/stubborn" data-page="stubborn">专项攻克</a>
+        <a href="#/quiz" data-page="quiz">测试中心</a>
+        <a href="#/wordbank" data-page="wordbank">单词库</a>
+        <a href="#/settings" data-page="settings">设置</a>
+      </nav>
+    </header>
+    <main id="content"></main>
+    <footer>
+      <p>VocabTracker · 每天进步一点点</p>
+    </footer>
+  </div>
+
+  <!-- JS modules loaded in dependency order -->
+  <script src="js/db.js"></script>
+  <script src="js/wordStore.js"></script>
+  <script src="js/scheduler.js"></script>
+  <script src="js/quizEngine.js"></script>
+  <script src="js/importExport.js"></script>
+  <script src="js/pdfReport.js"></script>
+  <script src="js/pages/dashboard.js"></script>
+  <script src="js/pages/study.js"></script>
+  <script src="js/pages/stubborn.js"></script>
+  <script src="js/pages/quiz.js"></script>
+  <script src="js/pages/wordBank.js"></script>
+  <script src="js/pages/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
