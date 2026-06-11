@@ -1,5 +1,24 @@
 [
   {
+    "id": "w_04976f6e-e997-4299-a98a-081f5d1f4cd9",
+    "spelling": "family",
+    "phonetic": "'fæmәli",
+    "meaning": "n. 家庭, 家人, 族",
+    "partOfSpeech": "",
+    "exampleSentence": "",
+    "source": "",
+    "stage": 0,
+    "nextReviewDate": "2026-06-11",
+    "difficulty": 1,
+    "reviewHistory": [],
+    "failStreak": 0,
+    "isStubborn": false,
+    "stubbornPassCount": 0,
+    "createdAt": "2026-06-11T06:21:01.469Z",
+    "updatedAt": "2026-06-11T06:21:01.469Z",
+    "status": "active"
+  },
+  {
     "id": "w_14351170-2e92-46d5-a956-6ef6b398b7e1",
     "spelling": "hesitate",
     "phonetic": "/ˈhezɪteɪt/",
