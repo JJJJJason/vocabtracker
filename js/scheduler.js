@@ -126,9 +126,11 @@ const Scheduler = {
     const stubbornForToday = allStubborn.slice(0, settings.stubbornDailyLimit);
 
     // Create the plan
+    // newWords = directly imported stage-0 words + words promoted from pool today
+    // reviewWords = stage > 0 words due for review
     plan = {
       date: dateStr,
-      newWords: newWordsToAdd.map(w => w.id),
+      newWords: [...todayActiveNew.map(w => w.id), ...newWordsToAdd.map(w => w.id)],
       reviewWords: dueWords.filter(w => w.stage > 0).map(w => w.id),
       stubbornWords: stubbornForToday.map(w => w.id),
       completed: false,
