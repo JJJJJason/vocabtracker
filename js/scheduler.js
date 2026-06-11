@@ -101,9 +101,10 @@ const Scheduler = {
   async generateDailyPlan(date) {
     const dateStr = typeof date === 'string' ? date : date.toISOString().split('T')[0];
 
-    // Check if plan already exists
+    // Only keep cached plan if already completed — otherwise
+    // regenerate to pick up newly imported words or code fixes.
     let plan = await DB.db.get('dailyPlans', dateStr);
-    if (plan) return plan;
+    if (plan && plan.completed) return plan;
 
     const settings = await DB.getSettings();
 
