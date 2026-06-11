@@ -93,6 +93,5 @@ async function initDashboard(container) {
 
 async function downloadTodayPDF() {
   const today = new Date().toISOString().split('T')[0];
-  const doc = await PDFReport.generateStudyList(today);
-  PDFReport.downloadPDF(doc, `背诵清单-${today}.pdf`);
+  await PDFReport.printStudyList(today);
 }
