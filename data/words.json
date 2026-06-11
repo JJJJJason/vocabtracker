@@ -259,6 +259,25 @@
     "status": "pool"
   },
   {
+    "id": "w_84b6fb30-a813-463f-ac03-d4504bd5de2c",
+    "spelling": "family",
+    "phonetic": "/ˈfɛm(ɘ)li/",
+    "meaning": "A group of people who are closely related to one another (by blood, marriage or adoption); kin; for example, a set of parents and their children; an immediate family.",
+    "partOfSpeech": "n.",
+    "exampleSentence": "Our family lives in town.",
+    "source": "",
+    "stage": 0,
+    "nextReviewDate": "2026-06-11",
+    "difficulty": 1,
+    "reviewHistory": [],
+    "failStreak": 0,
+    "isStubborn": false,
+    "stubbornPassCount": 0,
+    "createdAt": "2026-06-11T03:30:25.460Z",
+    "updatedAt": "2026-06-11T03:30:25.460Z",
+    "status": "active"
+  },
+  {
     "id": "w_8df82731-3d8d-41de-9ea4-d144f1a6e206",
     "spelling": "abandon",
     "phonetic": "/əˈbændən/",
