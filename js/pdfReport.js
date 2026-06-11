@@ -1,10 +1,11 @@
-// pdfReport.js — Printable report generation via browser print (handles Chinese perfectly)
+// pdfReport.js — Generate study reports as long PNG images via html2canvas
 
 const PDFReport = {
   /**
-   * Open a print window for the daily study list (背诵清单).
+   * Generate and download a study list as a long image (背诵清单).
    */
   async printStudyList(dateStr) {
+    showToast('正在生成图片...');
     const plan = await DB.db.get('dailyPlans', dateStr) || await Scheduler.generateDailyPlan(dateStr);
 
     const newWords = await _loadWords(plan.newWords);
@@ -12,17 +13,17 @@ const PDFReport = {
     const stubbornWords = await _loadWords(plan.stubbornWords);
 
     const html = _buildStudyListHTML(dateStr, newWords, reviewWords, stubbornWords);
-    _openPrintWindow(html, `背诵清单-${dateStr}`);
+    await _captureAndDownload(html, `背诵清单-${dateStr}.png`);
   },
 
   /**
-   * Open a print window for the quiz/test sheet (测试卷).
+   * Generate and download a quiz sheet as a long image (测试卷).
    */
   async printQuizSheet(dateStr) {
+    showToast('正在生成图片...');
     const plan = await DB.db.get('dailyPlans', dateStr) || await Scheduler.generateDailyPlan(dateStr);
     const words = await _loadWords([...plan.newWords, ...plan.reviewWords, ...plan.stubbornWords]);
 
-    // Generate quiz questions for each word
     const quizData = [];
     for (const w of words) {
       const q = await QuizEngine.generateEnToCh(w);
@@ -30,7 +31,7 @@ const PDFReport = {
     }
 
     const html = _buildQuizSheetHTML(dateStr, quizData);
-    _openPrintWindow(html, `测试卷-${dateStr}`);
+    await _captureAndDownload(html, `测试卷-${dateStr}.png`);
   },
 };
 
@@ -45,14 +46,61 @@ async function _loadWords(ids) {
   return words;
 }
 
-function _openPrintWindow(html, title) {
-  const w = window.open('', '_blank', 'width=800,height=600');
-  if (!w) { alert('请允许弹出窗口以打印'); return; }
-  w.document.write(html);
-  w.document.close();
-  w.focus();
-  // Delay print to let browser render the content
-  setTimeout(() => w.print(), 300);
+function showToast(msg) {
+  let toast = document.getElementById('report-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'report-toast';
+    toast.style.cssText = 'position:fixed; top:16px; left:50%; transform:translateX(-50%); background:#2c3e50; color:#fff; padding:10px 24px; border-radius:20px; font-size:14px; z-index:9999; pointer-events:none;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+}
+
+function hideToast() {
+  const toast = document.getElementById('report-toast');
+  if (toast) toast.style.opacity = '0';
+}
+
+async function _captureAndDownload(html, filename) {
+  // Create an off-screen container to render the report
+  const container = document.createElement('div');
+  container.id = '__report_render__';
+  container.innerHTML = html;
+  // Position off-screen so user doesn't see it, but html2canvas needs it in DOM
+  container.style.cssText = 'position:fixed; left:0; top:0; width:720px; z-index:-1; background:#fff;';
+  document.body.appendChild(container);
+
+  // Small delay so layout is computed
+  await new Promise(r => setTimeout(r, 150));
+
+  try {
+    const canvas = await html2canvas(container, {
+      scale: 2,          // 2x for sharp text on retina screens
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+    });
+    // Convert to blob and download
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      hideToast();
+    }, 'image/png');
+  } catch (e) {
+    console.error('Image generation failed:', e);
+    hideToast();
+    alert('图片生成失败: ' + e.message);
+  } finally {
+    document.body.removeChild(container);
+  }
 }
 
 function _escapeHTML(str) {
@@ -60,40 +108,35 @@ function _escapeHTML(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-const PRINT_CSS = `
+const REPORT_CSS = `
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif; color: #2c3e50; padding: 20px 28px; line-height: 1.7; }
+    body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif; color: #2c3e50; padding: 20px 24px; line-height: 1.7; font-size: 15px; background: #fff; }
     h1 { font-size: 22px; margin-bottom: 4px; }
     .date { font-size: 13px; color: #7f8c8d; margin-bottom: 18px; }
     .section { margin-bottom: 18px; }
-    .section-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 2px solid #eee; }
+    .section-title { font-size: 16px; font-weight: 700; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid #eee; }
     .section-title.new { color: #4a90d9; border-color: #4a90d9; }
     .section-title.review { color: #27ae60; border-color: #27ae60; }
     .section-title.stubborn { color: #e74c3c; border-color: #e74c3c; }
-    .word-row { margin-bottom: 10px; padding: 6px 10px; border-left: 3px solid #e0e0e0; }
-    .word-head { font-size: 14px; font-weight: 600; }
-    .word-head .pos { color: #4a90d9; font-weight: 400; margin-left: 4px; }
+    .word-row { margin-bottom: 12px; padding: 8px 12px; border-left: 3px solid #e0e0e0; background: #fafafa; border-radius: 0 6px 6px 0; }
+    .word-head { font-size: 15px; font-weight: 600; }
+    .word-head .pos { color: #4a90d9; font-weight: 400; margin-left: 4px; font-size: 13px; }
     .word-head .phonetic { color: #95a5a6; font-weight: 400; margin-left: 6px; font-size: 13px; }
-    .word-meaning { font-size: 13px; color: #555; margin-top: 2px; }
-    .word-example { font-size: 12px; color: #999; font-style: italic; margin-top: 1px; }
+    .word-meaning { font-size: 13px; color: #555; margin-top: 3px; }
+    .word-example { font-size: 12px; color: #999; font-style: italic; margin-top: 2px; }
     .footer { font-size: 11px; color: #bdc3c7; text-align: center; margin-top: 24px; padding-top: 12px; border-top: 1px solid #eee; }
 
     /* Quiz sheet styles */
-    .quiz-part { margin-bottom: 16px; }
-    .quiz-part h3 { font-size: 15px; margin-bottom: 8px; }
-    .quiz-item { margin-bottom: 10px; }
-    .quiz-item .q-title { font-size: 13px; font-weight: 600; }
-    .quiz-options { font-size: 12px; padding-left: 16px; }
-    .quiz-options div { margin: 2px 0; }
-    .write-line { font-size: 13px; margin: 4px 0; }
+    .quiz-part { margin-bottom: 18px; }
+    .quiz-part h3 { font-size: 15px; margin-bottom: 10px; }
+    .quiz-item { margin-bottom: 12px; border-bottom: 1px dashed #eee; padding-bottom: 8px; }
+    .quiz-item .q-title { font-size: 14px; font-weight: 600; }
+    .quiz-options { font-size: 13px; padding-left: 16px; }
+    .quiz-options div { margin: 3px 0; }
+    .write-line { font-size: 14px; margin: 6px 0; padding: 4px 0; }
     .header-info { font-size: 13px; margin-bottom: 6px; }
-    .header-info span { margin-right: 24px; }
-
-    @media print {
-      body { padding: 15px 20px; }
-      @page { margin: 12mm; }
-    }
+    .header-info span { margin-right: 28px; }
   </style>
 `;
 
@@ -134,10 +177,10 @@ function _buildStudyListHTML(dateStr, newWords, reviewWords, stubbornWords) {
   }
 
   if (!sections) {
-    sections = '<p style="color:#999; text-align:center; margin-top:40px;">今天没有需要背诵的单词</p>';
+    sections = '<p style="color:#999; text-align:center; margin-top:40px; font-size:14px;">今天没有需要背诵的单词</p>';
   }
 
-  return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>背诵清单 - ${dateStr}</title>${PRINT_CSS}</head><body>
+  return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">${REPORT_CSS}</head><body>
     <h1>📖 今日背诵清单</h1>
     <div class="date">日期: ${dateStr}</div>
     ${sections}
@@ -148,7 +191,6 @@ function _buildStudyListHTML(dateStr, newWords, reviewWords, stubbornWords) {
 function _buildQuizSheetHTML(dateStr, quizData) {
   const letters = ['A', 'B', 'C', 'D'];
 
-  // Part A: 英译中
   let partA = '';
   quizData.forEach((item, i) => {
     partA += `<div class="quiz-item">
@@ -159,13 +201,12 @@ function _buildQuizSheetHTML(dateStr, quizData) {
     </div>`;
   });
 
-  // Part B: 中译英
   let partB = '';
   quizData.forEach((item, i) => {
     partB += `<div class="write-line">${quizData.length + i + 1}. ${_escapeHTML(item.word.meaning)} __________________</div>`;
   });
 
-  return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>测试卷 - ${dateStr}</title>${PRINT_CSS}</head><body>
+  return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">${REPORT_CSS}</head><body>
     <h1>📝 单词测试卷</h1>
     <div class="header-info">
       <span>日期: ${dateStr}</span>
