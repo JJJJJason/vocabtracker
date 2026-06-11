@@ -3,6 +3,7 @@
     "spelling": "abandon",
     "phonetic": "/əˈbændən/",
     "meaning": "放弃；抛弃",
+    "partOfSpeech": "v.",
     "exampleSentence": "They had to abandon the plan due to bad weather.",
     "source": "卷38-金水区"
   },
@@ -10,6 +11,7 @@
     "spelling": "brilliant",
     "phonetic": "/ˈbrɪliənt/",
     "meaning": "杰出的；明亮的",
+    "partOfSpeech": "adj.",
     "exampleSentence": "She had a brilliant idea for the project.",
     "source": "卷38-金水区"
   },
@@ -17,6 +19,7 @@
     "spelling": "curious",
     "phonetic": "/ˈkjʊəriəs/",
     "meaning": "好奇的",
+    "partOfSpeech": "adj.",
     "exampleSentence": "The little boy was curious about everything.",
     "source": "卷42-惠济区"
   },
@@ -24,6 +27,7 @@
     "spelling": "discover",
     "phonetic": "/dɪˈskʌvər/",
     "meaning": "发现；发觉",
+    "partOfSpeech": "v.",
     "exampleSentence": "Scientists discover new things every day.",
     "source": "卷42-惠济区"
   },
@@ -31,6 +35,7 @@
     "spelling": "enormous",
     "phonetic": "/ɪˈnɔːrməs/",
     "meaning": "巨大的；庞大的",
+    "partOfSpeech": "adj.",
     "exampleSentence": "An enormous whale swam past the boat.",
     "source": "卷44-惠济区"
   },
@@ -38,6 +43,7 @@
     "spelling": "familiar",
     "phonetic": "/fəˈmɪliər/",
     "meaning": "熟悉的",
+    "partOfSpeech": "adj.",
     "exampleSentence": "The song sounded familiar to everyone.",
     "source": "卷44-惠济区"
   },
@@ -45,6 +51,7 @@
     "spelling": "generous",
     "phonetic": "/ˈdʒenərəs/",
     "meaning": "慷慨的；大方的",
+    "partOfSpeech": "adj.",
     "exampleSentence": "He was generous enough to share his lunch.",
     "source": "卷49-二七区"
   },
@@ -52,6 +59,7 @@
     "spelling": "hesitate",
     "phonetic": "/ˈhezɪteɪt/",
     "meaning": "犹豫；迟疑",
+    "partOfSpeech": "v.",
     "exampleSentence": "Don't hesitate to ask if you need help.",
     "source": "卷49-二七区"
   },
@@ -59,6 +67,7 @@
     "spelling": "immediate",
     "phonetic": "/ɪˈmiːdiət/",
     "meaning": "立即的；直接的",
+    "partOfSpeech": "adj.",
     "exampleSentence": "We need an immediate answer to this question.",
     "source": "卷32-高新区"
   },
@@ -66,6 +75,7 @@
     "spelling": "journey",
     "phonetic": "/ˈdʒɜːrni/",
     "meaning": "旅行；旅程",
+    "partOfSpeech": "n.",
     "exampleSentence": "The journey to the mountains took three hours.",
     "source": "卷32-高新区"
   }

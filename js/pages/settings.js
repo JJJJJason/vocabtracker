@@ -19,7 +19,7 @@ async function renderSettings(container) {
       <div class="card">
         <h3>📥 导入单词</h3>
         <p style="color:var(--color-text-light); font-size:14px; margin:8px 0;">
-          JSON 格式: [{"spelling": "word", "phonetic": "/.../", "meaning": "释义", "exampleSentence": "例句", "source": "来源"}]
+          JSON 格式: [{"spelling": "word", "phonetic": "/.../", "meaning": "释义", "partOfSpeech": "v./n./adj.", "exampleSentence": "例句", "source": "来源"}]
         </p>
         <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
           <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleFileImport(event)">

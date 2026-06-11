@@ -40,6 +40,7 @@ async function renderWordList(words) {
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
           <strong style="font-size:18px;">${w.spelling}</strong>
+          ${w.partOfSpeech ? `<span style="color:var(--color-primary); margin-left:6px; font-size:14px;">${w.partOfSpeech}</span>` : ''}
           <span style="color:var(--color-text-light); margin-left:8px;">${w.phonetic || ''}</span>
           ${w.isStubborn ? '<span class="badge badge-danger" style="margin-left:8px;">顽固</span>' : ''}
         </div>
@@ -101,6 +102,7 @@ async function editWord(id) {
       <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
         <label>拼写: <input id="edit-spelling" class="quiz-input" value="${escapeHtml(w.spelling)}" style="margin:0;"></label>
         <label>音标: <input id="edit-phonetic" class="quiz-input" value="${escapeHtml(w.phonetic || '')}" style="margin:0;"></label>
+        <label>词性: <input id="edit-pos" class="quiz-input" value="${escapeHtml(w.partOfSpeech || '')}" placeholder="如: v., n., adj., adv." style="margin:0;"></label>
         <label>释义: <input id="edit-meaning" class="quiz-input" value="${escapeHtml(w.meaning)}" style="margin:0;"></label>
         <label>例句: <input id="edit-sentence" class="quiz-input" value="${escapeHtml(w.exampleSentence || '')}" style="margin:0;"></label>
         <label>来源: <input id="edit-source" class="quiz-input" value="${escapeHtml(w.source || '')}" style="margin:0;"></label>
@@ -122,6 +124,7 @@ async function saveWordEdit(id) {
   const updates = {
     spelling: document.getElementById('edit-spelling').value,
     phonetic: document.getElementById('edit-phonetic').value,
+    partOfSpeech: document.getElementById('edit-pos').value,
     meaning: document.getElementById('edit-meaning').value,
     exampleSentence: document.getElementById('edit-sentence').value,
     source: document.getElementById('edit-source').value,

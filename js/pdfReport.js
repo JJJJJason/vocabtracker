@@ -76,7 +76,8 @@ const PDFReport = {
   _drawWordRow(doc, word, y) {
     doc.setFontSize(11);
     doc.setTextColor(44, 62, 80);
-    doc.text(`${word.spelling}  ${word.phonetic || ''}`, 14, y);
+    const posLabel = word.partOfSpeech ? `[${word.partOfSpeech}] ` : '';
+    doc.text(`${word.spelling}  ${posLabel}${word.phonetic || ''}`, 14, y);
     y += 6;
     doc.setFontSize(10);
     doc.setTextColor(127, 140, 141);

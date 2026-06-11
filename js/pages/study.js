@@ -82,7 +82,10 @@ function renderStudyCard(container) {
       </div>
 
       <div class="word-display">
-        <div class="word-spelling">${word.spelling}</div>
+        <div class="word-spelling">
+          ${word.spelling}
+          ${word.partOfSpeech ? `<span style="font-size:16px; color:var(--color-primary); margin-left:8px;">${word.partOfSpeech}</span>` : ''}
+        </div>
         ${word.phonetic ? `<div class="word-phonetic">${word.phonetic}</div>` : ''}
         <button class="btn btn-outline btn-sm" onclick="speakWord('${escapeForOnclick(word.spelling)}')">🔊 发音</button>
       </div>

@@ -49,6 +49,7 @@ const ImportExport = {
       spelling: w.spelling,
       phonetic: w.phonetic,
       meaning: w.meaning,
+      partOfSpeech: w.partOfSpeech,
       exampleSentence: w.exampleSentence,
       source: w.source,
     }));

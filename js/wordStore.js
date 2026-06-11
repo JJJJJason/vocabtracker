@@ -7,12 +7,13 @@ const WordStore = {
   },
 
   /** Create a new word object with defaults */
-  createWord({ spelling, phonetic, meaning, exampleSentence, source }) {
+  createWord({ spelling, phonetic, meaning, partOfSpeech, exampleSentence, source }) {
     return {
       id: this.generateId(),
       spelling: spelling.trim(),
       phonetic: phonetic || '',
       meaning: meaning.trim(),
+      partOfSpeech: partOfSpeech || '',
       exampleSentence: exampleSentence || '',
       source: source || '',
       stage: 0,
