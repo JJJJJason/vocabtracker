@@ -64,6 +64,16 @@ input, select, textarea, button, optgroup, datalist {
   font-family: var(--font-body);
 }
 
+/* Placeholder text always uses the body font — prevents Chinese
+   placeholder glyphs from falling back to serif (宋体) when the
+   input itself uses a word-spelling serif stack. */
+input::placeholder,
+textarea::placeholder {
+  font-family: var(--font-body) !important;
+  color: var(--color-text-muted);
+  opacity: 1; /* Firefox ships with reduced opacity by default */
+}
+
 /* Only English word input (add-word form) uses serif for readability */
 .word-spelling-input {
   font-family: var(--font-word) !important;
