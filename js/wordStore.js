@@ -24,6 +24,7 @@ const WordStore = {
       isStubborn: false,
       stubbornPassCount: 0,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
       status: 'active',
     };
   },
@@ -76,7 +77,7 @@ const WordStore = {
   async update(id, changes) {
     const word = await this.get(id);
     if (!word) throw new Error(`Word not found: ${id}`);
-    const updated = { ...word, ...changes };
+    const updated = { ...word, ...changes, updatedAt: new Date().toISOString() };
     await DB.db.put('words', updated);
     return updated;
   },

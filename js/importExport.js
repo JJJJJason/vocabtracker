@@ -37,6 +37,8 @@ const ImportExport = {
   /** Import words from parsed JSON data */
   async importWords(wordDataList) {
     const result = await WordStore.addBatch(wordDataList);
+    // Auto-push to GitHub if token is configured
+    GithubSync.push().catch(() => {}); // fire-and-forget, don't block UI
     const active = result.filter(w => w.status === 'active');
     const pooled = result.filter(w => w.status === 'pool');
     return { total: result.length, active: active.length, pooled: pooled.length, words: result };

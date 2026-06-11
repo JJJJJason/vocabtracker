@@ -30,6 +30,25 @@ async function renderSettings(container) {
       </div>
 
       <div class="card">
+        <h3>☁️ GitHub 云端同步</h3>
+        <p style="color:var(--color-text-light); font-size:13px; margin:8px 0;">
+          数据同步到 GitHub 仓库，其他设备打开网页后拉取即可共享数据。Token 仅存储在你的浏览器本地。
+        </p>
+        <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="password" id="sync-token" placeholder="粘贴 GitHub Token (ghp_...)" style="flex:1; padding:8px; border-radius:6px; border:1px solid var(--color-border); font-size:13px;">
+            <button class="btn btn-outline btn-sm" onclick="saveToken()">保存</button>
+          </div>
+          <div id="token-status" style="font-size:12px;"></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="syncPush()">📤 推送至云端</button>
+            <button class="btn btn-primary" onclick="syncPull()">📥 从云端拉取</button>
+          </div>
+          <div id="sync-status" style="font-size:12px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
         <h3>📤 导出/备份</h3>
         <div style="margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;">
           <button class="btn btn-outline" onclick="exportWordsJSON()">📄 导出单词 (JSON)</button>
@@ -127,4 +146,51 @@ async function clearAllData() {
   App.navigate('dashboard');
 }
 
-function initSettings(container) {}
+/* ── GitHub Sync UI ── */
+
+async function initSettings(container) {
+  await updateTokenStatus();
+}
+
+async function updateTokenStatus() {
+  const el = document.getElementById('token-status');
+  if (!el) return;
+  const configured = await GithubSync.isConfigured();
+  el.innerHTML = configured
+    ? '<span style="color:var(--color-success);">✅ Token 已配置</span>'
+    : '<span style="color:var(--color-text-light);">⚠️ 未配置 Token · <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--color-primary);">获取 Token</a>（勾选 public_repo 即可）</span>';
+}
+
+async function saveToken() {
+  const token = document.getElementById('sync-token').value.trim();
+  if (!token) { alert('请粘贴 Token'); return; }
+  if (!token.startsWith('ghp_')) { alert('Token 格式不正确，应以 ghp_ 开头'); return; }
+  await GithubSync.setToken(token);
+  document.getElementById('sync-token').value = '';
+  await updateTokenStatus();
+  alert('Token 已保存（仅存储在你的浏览器本地）');
+}
+
+async function syncPush() {
+  const el = document.getElementById('sync-status');
+  el.innerHTML = '<span style="color:var(--color-primary);">⏳ 推送中...</span>';
+  const result = await GithubSync.push();
+  if (result.success) {
+    el.innerHTML = `<span style="color:var(--color-success);">✅ 推送成功 · ${result.wordCount} 个单词已上传 · ${new Date().toLocaleTimeString('zh-CN')}</span>`;
+  } else {
+    el.innerHTML = `<span style="color:var(--color-danger);">❌ 推送失败: ${result.error}</span>`;
+  }
+}
+
+async function syncPull() {
+  const el = document.getElementById('sync-status');
+  el.innerHTML = '<span style="color:var(--color-primary);">⏳ 拉取中...</span>';
+  const result = await GithubSync.pull();
+  if (result.success) {
+    el.innerHTML = `<span style="color:var(--color-success);">✅ 拉取成功 · 新增 ${result.added} / 更新 ${result.updated} / 跳过 ${result.skipped} · ${new Date().toLocaleTimeString('zh-CN')}</span>`;
+    // Go to dashboard to see updated words
+    setTimeout(() => App.navigate('dashboard'), 1500);
+  } else {
+    el.innerHTML = `<span style="color:var(--color-danger);">❌ 拉取失败: ${result.error}</span>`;
+  }
+}
