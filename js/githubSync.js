@@ -81,19 +81,30 @@ const GithubSync = {
    * Returns { success, added, updated, skipped, error? }
    */
   async pull() {
-    // Fetch from raw.githubusercontent.com — no auth needed for public repos
-    const rawURL = `https://raw.githubusercontent.com/${this.REPO}/main/${this.FILE_PATH}`;
+    // Fetch from jsDelivr CDN (accessible in China) — no auth needed
+    // Format: https://cdn.jsdelivr.net/gh/<owner>/<repo>@<branch>/<path>
+    const urls = [
+      `https://cdn.jsdelivr.net/gh/${this.REPO}@main/${this.FILE_PATH}?_=${Date.now()}`,
+      `https://raw.githubusercontent.com/${this.REPO}/main/${this.FILE_PATH}`,
+    ];
     let remoteWords;
-    try {
-      const resp = await fetch(rawURL, { cache: 'no-cache' });
-      if (!resp.ok) {
-        if (resp.status === 404) return { success: false, error: '云端暂无数据，请先在电脑端推送一次' };
-        return { success: false, error: `HTTP ${resp.status}` };
+    let lastError = '';
+    for (const url of urls) {
+      try {
+        const resp = await fetch(url, { cache: 'no-cache' });
+        if (resp.ok) {
+          remoteWords = await resp.json();
+          lastError = '';
+          break;
+        }
+        if (resp.status === 404) { lastError = '云端暂无数据，请先在电脑端推送一次'; break; }
+        lastError = `HTTP ${resp.status}`;
+      } catch (e) {
+        lastError = e.message;
+        continue; // try next URL
       }
-      remoteWords = await resp.json();
-    } catch (e) {
-      return { success: false, error: `网络错误: ${e.message}` };
     }
+    if (!remoteWords) return { success: false, error: lastError || '无法连接云端' };
 
     // 2. Merge with local
     let added = 0, updated = 0, skipped = 0;
