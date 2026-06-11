@@ -2,7 +2,7 @@
 // Token stored locally in IndexedDB settings; never sent anywhere else.
 
 const GithubSync = {
-  REPO: 'JJJJJJason/vocabtracker',
+  REPO: 'JJJJJason/vocabtracker',
   FILE_PATH: 'data/words.json',
   API_BASE: 'https://api.github.com',
 
