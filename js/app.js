@@ -42,7 +42,12 @@ const App = {
     content.innerHTML = '';
     const container = document.createElement('div');
     container.id = `page-${hash}`;
-    page.render(container);
+    try {
+      await page.render(container);
+    } catch (e) {
+      console.error(`Error rendering page "${hash}":`, e);
+      container.innerHTML = `<div class="card"><p style="color:var(--color-danger);">页面加载失败: ${e.message}</p></div>`;
+    }
     content.appendChild(container);
     if (page.init) await page.init(container);
 
