@@ -41,7 +41,8 @@ const WordStore = {
 
     // Count words already active today (new words for today)
     const today = new Date().toISOString().split('T')[0];
-    const allActive = await DB.db.getAllFromIndex('words', 'status', 'active');
+    const allWords = await DB.db.getAll('words');
+    const allActive = allWords.filter(w => w.status === 'active');
     const todayActive = allActive.filter(w =>
       w.stage === 0 && w.createdAt.split('T')[0] === today
     );
@@ -102,7 +103,8 @@ const WordStore = {
 
   /** Get all stubborn words (isStubborn = true) */
   async getStubborn() {
-    return await DB.db.getAllFromIndex('words', 'isStubborn', true);
+    const all = await DB.db.getAll('words');
+    return all.filter(w => w.isStubborn === true);
   },
 
   /** Count stubborn words */
@@ -113,7 +115,8 @@ const WordStore = {
 
   /** Get pool words (status = 'pool') */
   async getPoolWords() {
-    return await DB.db.getAllFromIndex('words', 'status', 'pool');
+    const all = await DB.db.getAll('words');
+    return all.filter(w => w.status === 'pool');
   },
 
   /** Move a word from pool to active */
@@ -127,7 +130,8 @@ const WordStore = {
 
   /** Get words by status */
   async getByStatus(status) {
-    return await DB.db.getAllFromIndex('words', 'status', status);
+    const all = await DB.db.getAll('words');
+    return all.filter(w => w.status === status);
   },
 
   /** Count words by status */
